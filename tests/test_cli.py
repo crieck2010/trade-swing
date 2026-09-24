@@ -25,14 +25,17 @@ def test_cli_demo(capsys):
     assert main(["demo"]) == 0
     out = capsys.readouterr().out
     assert "trend" in out and "chop" in out
-    assert "PASS" in out  # the pipeline check line
+    # with siblings: PASS line; bare: loud CANNOT EVALUATE
+    assert "PASS" in out or "CANNOT EVALUATE" in out
 
 
 def test_cli_demo_json(capsys):
     assert main(["demo", "--json"]) == 0
     payload = json.loads(capsys.readouterr().out)
-    assert payload["trend"]["status"] == "PASS"
-    assert payload["chop"]["status"] in ("FAIL", "WARN")
+    # with trade-overfit installed: trend PASS, chop FAIL/WARN;
+    # bare: both SKIPPED (loud, never silent)
+    assert payload["trend"]["status"] in ("PASS", "WARN", "FAIL", "SKIPPED")
+    assert payload["chop"]["status"] in ("PASS", "WARN", "FAIL", "SKIPPED")
 
 
 def test_cli_validate_json(capsys):

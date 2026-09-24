@@ -33,7 +33,7 @@ def main() -> None:
         try:
             bt = run_backtest(sub, config=SwingConfig(),
                               force_engine=force)
-        except ImportError:
+        except (ImportError, RuntimeError):
             print(f"\nengine path {force!r}: sibling not installed, skipped")
             continue
         m = bt["metrics"]

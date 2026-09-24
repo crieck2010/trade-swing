@@ -145,8 +145,13 @@ def cmd_demo(args):
         print(_table(rows, ["basket", "verdict", "trades", "sharpe", "max DD"]))
         print("\nPipeline check: trend should PASS, chop should FAIL/WARN.")
         t, c = reports["trend"]["validation"]["status"], reports["chop"]["validation"]["status"]
-        print("PASS" if t == "PASS" and c in ("FAIL", "WARN")
-              else "CHECK FAILED", f"(trend={t}, chop={c})")
+        if "SKIPPED" in (t, c):
+            print(f"CANNOT EVALUATE (trend={t}, chop={c}): trade-overfit is "
+                  f"not installed, so no gate verdicts exist. Install it and "
+                  f"re-run; a SKIPPED verdict proves nothing.")
+        else:
+            print("PASS" if t == "PASS" and c in ("FAIL", "WARN")
+                  else "CHECK FAILED", f"(trend={t}, chop={c})")
 
 
 def cmd_presets(args):
