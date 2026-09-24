@@ -50,8 +50,10 @@ def main() -> None:
         for g in v["gates"]:
             val = (f"{g['value']:.4f}" if isinstance(g["value"], float)
                    else g["value"])
+            marg = (f"{g['margin']:+.4f}" if isinstance(g["margin"], float)
+                    else g["margin"])
             print(f"    {g['name']:22s} {g['verdict']:4s} "
-                  f"(value={val}, margin={g['margin']:+.4f})")
+                  f"(value={val}, margin={marg})")
         for w in v["warnings"]:
             print(f"    WARN [{w['name']}]: {w['description'][:80]}...")
 
